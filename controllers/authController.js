@@ -28,17 +28,29 @@ exports.registerWithEmail = (req, res) => {
             res.status(500).json({ error: 'User registration failed', details: error.message });
         });
 };
-exports.loginWithEmail = (req, res) => {
-    const { email, password } = req.body;
+exports.validateLogin = (req, res) => {
+    const {token} = req.body;
+
+    // validate token using firebase admin
     admin
         .auth()
-        .getUserByEmail(email)
-        .then((userRecord) => {
-            // User login successful
-            res.status(200).json({ message: 'User logged in successfully', uid: userRecord.uid });
+        .verifyIdToken(token)
+        .then((decodedToken) => {
+            const uid = decodedToken.uid;
+            // get user details from firestore
+            db.collection('users').doc(uid).get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        return res.status(404).json({ error: 'User not found' });
+                    }
+                    return res.status(200).json({ message: 'User logged in successfully', user: doc.data() });
+                })
+                .catch((error) => {
+                    return res.status(500).json({ error: 'Error getting user', details: error.message });
+                });
         })
         .catch((error) => {
-            // Error occurred during user login
-            res.status(500).json({ error: 'User login failed', details: error.message });
+            return res.status(500).json({ error: 'Error validating user', details: error.message });
         });
 }
+
