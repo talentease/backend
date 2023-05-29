@@ -1,4 +1,6 @@
 const express = require('express');
+
+const authenticateToken = require('../middlewares/authenticateToken');
 const {
     createPosition,
     getAllPositions,
@@ -8,10 +10,12 @@ const {
 } = require('../controllers/positionControllers');
 
 const router = express.Router();
-router.post('', createPosition);
-router.get('', getAllPositions);
+const app = express();
+
 router.get('/:positionId', getPositionById);
-router.put('/:positionId', updatePosition);
-router.delete('/:positionId', deletePosition);
+router.get('', getAllPositions);
+router.post('', authenticateToken, createPosition);
+router.put('/:positionId', authenticateToken, updatePosition);
+router.delete('/:positionId', authenticateToken, deletePosition);
 
 module.exports = router;
