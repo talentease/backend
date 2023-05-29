@@ -10,7 +10,6 @@ const {
 } = require('../controllers/positionControllers');
 
 const router = express.Router();
-const app = express();
 
 router.get('/:positionId', getPositionById);
 router.get('', getAllPositions);
