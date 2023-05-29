@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerWithEmail, validateLogin } = require('../controllers/authController');
+const { registerWithEmail } = require('../controllers/authController');
 
 
 // Register a new user
