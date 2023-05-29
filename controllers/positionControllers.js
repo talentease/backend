@@ -3,19 +3,26 @@ const { db } = require('../config/firebaseAdmin');
 const position = db.collection('positions');
 
 const createPosition = (req, res) => {
-    const {
-        recruiterId, title, description, location, salary, type, deadline,
-    } = req.body;
-    const newPosition = {
-        recruiterId, title, description, location, salary, type, deadline,
-    };
-    position.add(newPosition)
-        .then((doc) => {
-            res.status(200).json({ message: 'Position created successfully', id: doc.id });
-        })
-        .catch((error) => {
-            res.status(500).json({ error: 'Error creating position', details: error.message });
-        });
+   const role = req.userRole;
+   if (role === 'recruiter' || role === 'admin') {
+       const recruiterId = req.user.uid;
+       const {
+           title, description, location, salary, type, deadline,
+       } = req.body;
+       const newPosition = {
+           recruiterId, title, description, location, salary, type, deadline,
+       };
+
+       position.add(newPosition)
+           .then((doc) => {
+               res.status(200).json({ message: 'Position created successfully', id: doc.id });
+           })
+           .catch((error) => {
+               res.status(500).json({ error: 'Error creating position', details: error.message });
+           });
+   } else {
+         res.status(403).json({ error: 'Unauthorized' });
+   }
 };
 
 const getAllPositions = (req, res) => {
