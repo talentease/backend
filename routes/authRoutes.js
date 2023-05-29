@@ -5,6 +5,5 @@ const { registerWithEmail, validateLogin } = require('../controllers/authControl
 
 // Register a new user
 router.post('/register', registerWithEmail);
-router.post('/validate', validateLogin)
 
 module.exports = router;
