@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const positionRoutes = require('./routes/positionRoutes');
 
-const port = process.env.PORT || 8080;
-const host = process.env.HOST || 'localhost';
 const app = express();
 const router = express.Router();
+
+// Port & Host
+const port = process.env.PORT || 8080;
+const host = process.env.HOST || 'localhost';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
