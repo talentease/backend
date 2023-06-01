@@ -15,7 +15,6 @@ const authenticateToken = (req, res, next) => {
         .verifyIdToken(token)
         .then((decodedToken) => {
             req.user = decodedToken;
-
             // Fetch the user role based on the user ID
             const userId = decodedToken.uid;
             return admin.firestore().collection('users').doc(userId).get();
@@ -25,7 +24,7 @@ const authenticateToken = (req, res, next) => {
                 req.userRole = doc.data().role; // Add the user role to the request object
                 next();
             } else {
-                throw new Error('User document not found');
+               next();
             }
         })
         .catch((error) => {
