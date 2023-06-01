@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const positionRoutes = require('./routes/positionRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 const router = express.Router();
@@ -19,6 +20,7 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/position', positionRoutes);
+router.use('/profile', profileRoutes);
 
 app.use('/api/v1', router);
 app.listen(port, host, () => {
