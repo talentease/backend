@@ -3,7 +3,7 @@ const { db } = require('../config/firebaseAdmin');
 const collection = db.collection('users');
 
 class ProfileModel {
-    static async createProfileCandidate(profile) {
+    static async createProfile(profile) {
         const newProfile = await collection.doc(profile.uid).set(profile);
         return newProfile;
     }
