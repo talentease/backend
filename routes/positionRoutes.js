@@ -7,7 +7,7 @@ const {
     getPositionById,
     updatePosition,
     deletePosition,
-} = require('../controllers/positionControllers');
+} = require('../controllers/positionController');
 
 const router = express.Router();
 

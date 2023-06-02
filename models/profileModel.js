@@ -3,13 +3,13 @@ const { db } = require('../config/firebaseAdmin');
 const collection = db.collection('users');
 
 class ProfileModel {
-    static async createProfile(profile) {
-        const newProfile = await collection.doc(profile.uid).set(profile);
+    static async createProfile(data) {
+        const newProfile = await collection.doc(data.uid).set(data);
         return newProfile;
     }
 
-    static async getProfileById(profileId) {
-        const profile = await collection.doc(profileId).get();
+    static async getProfileById(id) {
+        const profile = await collection.doc(id).get();
         return profile;
     }
 
@@ -18,18 +18,26 @@ class ProfileModel {
         return profile;
     }
 
-    static async updateProfile(profile) {
-        const updatedProfile = await collection.doc(profile.uid).set(profile);
-        return updatedProfile;
+    static async updateProfile(data) {
+        const profile = await collection.doc(data.uid).get();
+        if (profile.exists) {
+            const updatedProfile = await collection.doc(data.uid).set(data);
+            return updatedProfile;
+        }
+        return null;
     }
 
-    static async deleteProfile(profileId) {
-        const deletedProfile = await collection.doc(profileId).delete();
-        return deletedProfile;
+    static async deleteProfile(id) {
+        const profile = await collection.doc(id).get();
+        if (profile.exists) {
+            const deletedProfile = await collection.doc(id).delete();
+            return deletedProfile;
+        }
+        return null;
     }
 
-    static async getRole(profileId) {
-        const profile = await collection.doc(profileId).get();
+    static async getRole(id) {
+        const profile = await collection.doc(id).get();
         if (profile.exists) {
             return profile.data().role;
         }

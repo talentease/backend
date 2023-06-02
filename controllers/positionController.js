@@ -10,7 +10,13 @@ const createPosition = async (req, res) => {
             title, description, location, salary, type, deadline,
         } = req.body;
         const position = {
-            recruiterId, title, description, location, salary, type, deadline,
+            recruiterId,
+            title,
+            description,
+            location,
+            salary,
+            type,
+            deadline,
         };
         const newPosition = await PositionModel.createPosition(position);
         if (newPosition) {
@@ -51,7 +57,14 @@ const updatePosition = async (req, res) => {
             title, description, location, salary, type, deadline,
         } = req.body;
         const position = {
-            id, recruiterId, title, description, location, salary, type, deadline,
+            id,
+            recruiterId,
+            title,
+            description,
+            location,
+            salary,
+            type,
+            deadline,
         };
         const updatedPosition = await PositionModel.updatePosition(id, position);
         if (updatedPosition) {
