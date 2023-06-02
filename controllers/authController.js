@@ -1,7 +1,7 @@
 const { admin, db } = require('../config/firebaseAdmin');
 const { responseSuccess, responseError } = require('../utils/responseHandler');
 
-exports.registerWithEmail = (req, res) => {
+const registerWithEmail = (req, res) => {
     const { email, password } = req.body;
     admin
         .auth()
@@ -10,7 +10,7 @@ exports.registerWithEmail = (req, res) => {
             password,
         })
         .then((userRecord) => {
-           // store user details in firestore
+            // store user details in firestore
             const user = {
                 uid: userRecord.uid,
                 email: userRecord.email,
@@ -19,9 +19,13 @@ exports.registerWithEmail = (req, res) => {
 
             const userData = db.collection('users').doc(userRecord.uid).set(user);
             if (!userData) {
-               return responseError(res, 'User registration failed', 500);
+                return responseError(res, 'User registration failed', 500);
             }
-           return responseSuccess(res, user, 'User registered successfully', 201);
+            return responseSuccess(res, user, 'User registered successfully', 201);
         })
         .catch((error) => responseError(res, error.message, 400));
+};
+
+module.exports = {
+    registerWithEmail,
 };

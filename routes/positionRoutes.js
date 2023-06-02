@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/:positionId', getPositionById);
 router.get('', getAllPositions);
 router.post('', authenticateToken, createPosition);
-router.put('/:positionId', authenticateToken, updatePosition);
+router.patch('/:positionId', authenticateToken, updatePosition);
 router.delete('/:positionId', authenticateToken, deletePosition);
 
 module.exports = router;
