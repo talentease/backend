@@ -20,22 +20,23 @@ const createProfileCandidate = async (req, res) => {
     };
     const newProfile = await ProfileModel.createProfile(profile);
     if (!newProfile) {
-        return responseError(res, 'Profile creation failed', 500);
+        return responseError(res, 'Profile Candidate creation failed', 500);
     }
-    return responseSuccess(res, profile, 'Profile created successfully', 201);
+    return responseSuccess(res, profile, 'Profile Candidate created successfully', 201);
 };
 
 const createProfileRecruiter = async (req, res) => {
     const {
         email, password, firstName, lastName, phoneNumber,
     } = req.body;
+    const existingProfile = await ProfileModel.getProfileByEmail(email);
+    if (!existingProfile.empty) {
+        return responseError(res, 'Profile already exists', 422);
+    }
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'admin') {
-        const existingProfile = await ProfileModel.getProfileByEmail(email);
-        if (!existingProfile.empty) {
-            return responseError(res, 'Profile already exists', 422);
-        }
+        const companyID = await ProfileModel.getCompany(recruiterId);
         const createdUser = await admin
             .auth()
             .createUser({
@@ -49,17 +50,18 @@ const createProfileRecruiter = async (req, res) => {
                 firstName,
                 lastName,
                 phoneNumber,
+                companyID,
                 role: 'recruiter',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             };
             const userData = ProfileModel.createProfile(user);
             if (!userData) {
-                return responseError(res, 'User registration failed', 500);
+                return responseError(res, 'Profile Recruiter creation failed', 500);
             }
-            return responseSuccess(res, user, 'User registered successfully', 201);
+            return responseSuccess(res, user, 'Profile Recruiter created successfully', 201);
         }
-        return responseError(res, 'User registration failed', 500);
+        return responseError(res, 'Profile Recruiter creation failed', 500);
     }
     return responseError(res, 'Forbidden', 403);
 };
