@@ -35,7 +35,7 @@ const createCompanyAdmin = async (req, res) => {
             firstName,
             lastName,
             phoneNumber,
-            role: 'recruiter',
+            role: 'admin',
             companyID: newCompany.id,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

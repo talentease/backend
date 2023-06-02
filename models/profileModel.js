@@ -43,6 +43,14 @@ class ProfileModel {
         }
         return null;
     }
+
+    static async getCompany(id) {
+        const profile = await collection.doc(id).get();
+        if (profile.exists) {
+            return profile.data().companyID;
+        }
+        return null;
+    }
 }
 
 module.exports = ProfileModel;
