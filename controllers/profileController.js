@@ -7,16 +7,13 @@ const createProfileCandidate = async (req, res) => {
     if (!existingProfile.empty) {
         return responseError(res, 'Profile already exists', 422);
     }
-    const {
-        firstName, lastName, phoneNumber, location,
-    } = req.body;
+    const { firstName, lastName, phoneNumber } = req.body;
     const profile = {
         email: req.user.email,
         uid: req.user.uid,
         firstName,
         lastName,
         phoneNumber,
-        location,
         role: 'candidate',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -30,7 +27,7 @@ const createProfileCandidate = async (req, res) => {
 
 const createProfileRecruiter = async (req, res) => {
     const {
-        email, password, firstName, lastName, phoneNumber, location,
+        email, password, firstName, lastName, phoneNumber,
     } = req.body;
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
@@ -52,7 +49,6 @@ const createProfileRecruiter = async (req, res) => {
                 firstName,
                 lastName,
                 phoneNumber,
-                location,
                 role: 'recruiter',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -70,16 +66,13 @@ const createProfileRecruiter = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     const existingProfile = await ProfileModel.getProfileById(req.user.uid);
-    const {
-        firstName, lastName, phoneNumber, location,
-    } = req.body;
+    const { firstName, lastName, phoneNumber } = req.body;
     const profile = {
         uid: req.user.uid,
         email: req.user.email,
         firstName,
         lastName,
         phoneNumber,
-        location,
         role: existingProfile.data().role,
         createdAt: existingProfile.data().createdAt,
         updateAt: new Date().toISOString(),
