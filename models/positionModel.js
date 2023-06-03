@@ -10,12 +10,30 @@ class PositionModel {
 
     static async getAllPositions() {
         const positions = await collection.get();
-        return positions;
+        const positionsData = positions.docs.map(async (position) => {
+            const company = await position.data().companyID;
+            const companyData = await db.collection('companies').doc(company).get();
+            const companyDetails = companyData.data();
+            const positionDetails = position.data();
+            return {
+                id: position.id,
+                ...positionDetails,
+                company: companyDetails,
+            };
+        });
+        return Promise.all(positionsData);
     }
 
     static async getPositionById(id) {
         const position = await collection.doc(id).get();
-        return position;
+        if (position.exists) {
+            const company = await position.data().companyID;
+            const companyData = await db.collection('companies').doc(company).get();
+            const companyDetails = companyData.data();
+            const positionDetails = position.data();
+            return { ...positionDetails, company: companyDetails };
+        }
+        return null;
     }
 
     static async updatePosition(id, data) {

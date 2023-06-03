@@ -10,7 +10,6 @@ const createProfileCandidate = async (req, res) => {
     const { firstName, lastName, phoneNumber } = req.body;
     const profile = {
         email: req.user.email,
-        uid: req.user.uid,
         firstName,
         lastName,
         phoneNumber,
@@ -18,7 +17,7 @@ const createProfileCandidate = async (req, res) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
     };
-    const newProfile = await ProfileModel.createProfile(profile);
+    const newProfile = await ProfileModel.createProfile(req.user.uid, profile);
     if (!newProfile) {
         return responseError(res, 'Profile Candidate creation failed', 500);
     }
@@ -45,7 +44,6 @@ const createProfileRecruiter = async (req, res) => {
             });
         if (createdUser) {
             const user = {
-                uid: createdUser.uid,
                 email: createdUser.email,
                 firstName,
                 lastName,
@@ -55,7 +53,7 @@ const createProfileRecruiter = async (req, res) => {
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             };
-            const userData = ProfileModel.createProfile(user);
+            const userData = ProfileModel.createProfile(createdUser.uid, user);
             if (!userData) {
                 return responseError(res, 'Profile Recruiter creation failed', 500);
             }
@@ -70,7 +68,6 @@ const updateProfile = async (req, res) => {
     const existingProfile = await ProfileModel.getProfileById(req.user.uid);
     const { firstName, lastName, phoneNumber } = req.body;
     const profile = {
-        uid: req.user.uid,
         email: req.user.email,
         firstName,
         lastName,
@@ -79,7 +76,7 @@ const updateProfile = async (req, res) => {
         createdAt: existingProfile.data().createdAt,
         updateAt: new Date().toISOString(),
     };
-    const updatedProfile = await ProfileModel.updateProfile(profile);
+    const updatedProfile = await ProfileModel.createProfile(req.user.uid, profile);
     if (!updatedProfile) {
         return responseError(res, 'Profile update failed', 500);
     }

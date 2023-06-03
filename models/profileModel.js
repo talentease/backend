@@ -3,8 +3,8 @@ const { db } = require('../config/firebaseAdmin');
 const collection = db.collection('users');
 
 class ProfileModel {
-    static async createProfile(data) {
-        const newProfile = await collection.doc(data.uid).set(data);
+    static async createProfile(id, data) {
+        const newProfile = await collection.doc(id).set(data);
         return newProfile;
     }
 
@@ -18,10 +18,10 @@ class ProfileModel {
         return profile;
     }
 
-    static async updateProfile(data) {
-        const profile = await collection.doc(data.uid).get();
+    static async updateProfile(id, data) {
+        const profile = await collection.doc(id).get();
         if (profile.exists) {
-            const updatedProfile = await collection.doc(data.uid).set(data);
+            const updatedProfile = await collection.doc(id).set(data);
             return updatedProfile;
         }
         return null;
@@ -46,7 +46,7 @@ class ProfileModel {
 
     static async getCompany(id) {
         const profile = await collection.doc(id).get();
-        if (profile.exists) {
+        if (profile.exists && (profile.data().role === 'recruiter' || profile.data().role === 'admin')) {
             return profile.data().companyID;
         }
         return null;
