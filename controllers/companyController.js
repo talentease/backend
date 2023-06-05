@@ -47,7 +47,7 @@ const createCompanyAdmin = async (req, res) => {
         if (!newAdmin || !newCompany) {
             return responseError(res, 'Company Admin registration failed', 500);
         }
-        return responseSuccess(res, user, 'Company Admin created successfully', 201);
+        return responseSuccess(res, { id: createdUser.uid, ...user }, 'Company Admin registered successfully', 201);
     }
     return responseError(res, 'Company Admin registration failed', 500);
 };
