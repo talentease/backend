@@ -21,7 +21,7 @@ const createProfileCandidate = async (req, res) => {
     if (!newProfile) {
         return responseError(res, 'Profile Candidate creation failed', 500);
     }
-    return responseSuccess(res, profile, 'Profile Candidate created successfully', 201);
+    return responseSuccess(res, { id: req.user.uid, ...profile }, 'Profile Candidate created successfully', 201);
 };
 
 const createProfileRecruiter = async (req, res) => {
@@ -57,7 +57,7 @@ const createProfileRecruiter = async (req, res) => {
             if (!userData) {
                 return responseError(res, 'Profile Recruiter creation failed', 500);
             }
-            return responseSuccess(res, user, 'Profile Recruiter created successfully', 201);
+            return responseSuccess(res, { id: createdUser.uid, ...user }, 'Profile Recruiter created successfully', 201);
         }
         return responseError(res, 'Profile Recruiter creation failed', 500);
     }
