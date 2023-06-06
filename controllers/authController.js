@@ -12,11 +12,9 @@ const registerWithEmail = (req, res) => {
         .then((userRecord) => {
             // store user details in firestore
             const user = {
-                uid: userRecord.uid,
                 email: userRecord.email,
                 createdAt: new Date().toISOString(),
             };
-
             const userData = db.collection('users').doc(userRecord.uid).set(user);
             if (!userData) {
                 return responseError(res, 'User registration failed', 500);
