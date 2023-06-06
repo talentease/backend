@@ -18,19 +18,22 @@ const createCompanyAdmin = async (req, res) => {
     if (!existingProfile.empty) {
         return responseError(res, 'Profile already exists', 422);
     }
-    const createdUser = await admin.auth().createUser({
-        email,
-        password,
-    });
+    const createdUser = await admin
+        .auth()
+        .createUser({
+            email,
+            password,
+        });
     if (createdUser) {
         const company = {
-            companyName,
-            companyAddress,
-            companyDescription,
+            name: companyName,
+            address: companyAddress,
+            description: companyDescription,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
         };
         const newCompany = await CompanyModel.createCompany(company);
         const user = {
-            uid: createdUser.uid,
             email: createdUser.email,
             firstName,
             lastName,
@@ -40,13 +43,13 @@ const createCompanyAdmin = async (req, res) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
-        const newAdmin = ProfileModel.createProfile(user);
-        if (!newAdmin && !newCompany) {
-            return responseError(res, 'Company admin registration failed', 500);
+        const newAdmin = ProfileModel.createProfile(createdUser.uid, user);
+        if (!newAdmin || !newCompany) {
+            return responseError(res, 'Company Admin registration failed', 500);
         }
-        return responseSuccess(res, user, 'Company admin created successfully', 201);
+        return responseSuccess(res, { id: createdUser.uid, ...user }, 'Company Admin registered successfully', 201);
     }
-    return responseError(res, 'Company admin registration failed', 500);
+    return responseError(res, 'Company Admin registration failed', 500);
 };
 
 module.exports = {

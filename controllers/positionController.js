@@ -7,16 +7,18 @@ const createPosition = async (req, res) => {
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'recruiter' || role === 'admin') {
         const {
-            title, description, location, salary, type, deadline,
+            title, description, salary, type, deadline,
         } = req.body;
+        const companyID = await ProfileModel.getCompany(recruiterId);
         const position = {
-            recruiterId,
+            companyID,
             title,
             description,
-            location,
             salary,
             type,
             deadline,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
         };
         const newPosition = await PositionModel.createPosition(position);
         if (newPosition) {
@@ -30,11 +32,7 @@ const createPosition = async (req, res) => {
 const getAllPositions = async (req, res) => {
     const positions = await PositionModel.getAllPositions();
     if (positions) {
-        const positionsList = [];
-        positions.forEach((doc) => {
-            positionsList.push({ id: doc.id, ...doc.data() });
-        });
-        return responseSuccess(res, positionsList, 'Positions retrieved successfully', 200);
+        return responseSuccess(res, positions, 'Positions retrieved successfully', 200);
     }
     return responseError(res, 'Positions retrieval failed', 500);
 };
@@ -42,10 +40,10 @@ const getAllPositions = async (req, res) => {
 const getPositionById = async (req, res) => {
     const id = req.params.positionId;
     const position = await PositionModel.getPositionById(id);
-    if (!position.exists) {
+    if (!position) {
         return responseError(res, 'Position not found', 404);
     }
-    return responseSuccess(res, { id: position.id, ...position.data() }, 'Position retrieved successfully', 200);
+    return responseSuccess(res, { id, ...position }, 'Position retrieved successfully', 200);
 };
 
 const updatePosition = async (req, res) => {
@@ -54,17 +52,15 @@ const updatePosition = async (req, res) => {
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'recruiter' || role === 'admin') {
         const {
-            title, description, location, salary, type, deadline,
+            title, description, salary, type, deadline,
         } = req.body;
         const position = {
-            id,
-            recruiterId,
             title,
             description,
-            location,
             salary,
             type,
             deadline,
+            updatedAt: new Date().toISOString(),
         };
         const updatedPosition = await PositionModel.updatePosition(id, position);
         if (updatedPosition) {
