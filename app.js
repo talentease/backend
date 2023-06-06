@@ -9,8 +9,8 @@ const companyRoutes = require('./routes/companyRoutes');
 const app = express();
 const router = express.Router();
 
-const port = process.env.PORT || 8080;
-const host = process.env.HOST || 'localhost';
+// Port & Host
+const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,6 +25,6 @@ router.use('/profile', profileRoutes);
 router.use('/company', companyRoutes);
 
 app.use('/api/v1', router);
-app.listen(port, host, () => {
-  console.log(`Server running at http://${host}:${port}`);
+app.listen(port, () => {
+  console.log(`Talentease: listening on port ${port}`);
 });
