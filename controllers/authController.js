@@ -10,6 +10,7 @@ const registerWithEmail = (req, res) => {
             password,
         })
         .then((userRecord) => {
+            // store user details in firestore
             const user = {
                 email: userRecord.email,
                 createdAt: new Date().toISOString(),
