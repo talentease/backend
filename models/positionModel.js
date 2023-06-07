@@ -12,7 +12,7 @@ class PositionModel {
     static async getAllPositions() {
         const positions = await collection.get();
         const positionsData = positions.docs.map(async (position) => {
-            const company = await position.data().companyID;
+            const company = await position.data().companyId;
             const companyData = await CompanyModel.getCompanyById(company);
             const companyDetails = companyData.data();
             const positionDetails = position.data();
@@ -28,7 +28,7 @@ class PositionModel {
     static async getPositionById(id) {
         const position = await collection.doc(id).get();
         if (position.exists) {
-            const company = await position.data().companyID;
+            const company = await position.data().companyId;
             const companyData = await CompanyModel.getCompanyById(company);
             if (!companyData) {
                 return null;

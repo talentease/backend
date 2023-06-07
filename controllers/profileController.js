@@ -4,7 +4,7 @@ const ProfileModel = require('../models/profileModel');
 
 const createProfileCandidate = async (req, res) => {
     const existingProfile = await ProfileModel.getProfileByEmail(req.user.email);
-    if (!existingProfile.empty) {
+    if (existingProfile) {
         return responseError(res, 'Profile already exists', 422);
     }
     const { firstName, lastName, phoneNumber } = req.body;
@@ -28,13 +28,13 @@ const createProfileRecruiter = async (req, res) => {
     const {
         email, password, firstName, lastName, phoneNumber,
     } = req.body;
-    const existingProfile = await ProfileModel.getProfileByEmail(email);
-    if (!existingProfile) {
-        return responseError(res, 'Profile already exists', 422);
-    }
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'admin') {
+        const existingProfile = await ProfileModel.getProfileByEmail(email);
+        if (existingProfile) {
+            return responseError(res, 'Profile already exists', 422);
+        }
         const companyID = await ProfileModel.getCompany(recruiterId);
         const createdUser = await admin
             .auth()

@@ -8,17 +8,24 @@ class ApplicationModel {
         return newApplication;
     }
 
-    static async getAllApplications() {
-        const applications = await collection.get();
-        return applications;
-    }
-
     static async getApplicationById(id) {
         const application = await collection.doc(id).get();
         if (application.exists) {
             return application;
         }
         return null;
+    }
+
+    static async getApplicationByPositionId(positionId) {
+        const applications = await collection.where('positionId', '==', positionId).get();
+        if (applications.empty) {
+            return null;
+        }
+        const applicationList = [];
+        applications.forEach((application) => {
+            applicationList.push({ id: application.id, ...application.data() });
+        });
+        return applicationList;
     }
 
     static async updateApplication(id, data) {

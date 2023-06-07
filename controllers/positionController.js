@@ -9,9 +9,9 @@ const createPosition = async (req, res) => {
         const {
             title, description, salary, type, deadline,
         } = req.body;
-        const companyID = await ProfileModel.getCompany(recruiterId);
+        const companyId = await ProfileModel.getCompany(recruiterId);
         const position = {
-            companyID,
+            companyId,
             title,
             description,
             salary,
@@ -51,20 +51,28 @@ const updatePosition = async (req, res) => {
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'recruiter' || role === 'admin') {
-        const {
-            title, description, salary, type, deadline,
-        } = req.body;
-        const position = {
-            title,
-            description,
-            salary,
-            type,
-            deadline,
-            updatedAt: new Date().toISOString(),
-        };
-        const updatedPosition = await PositionModel.updatePosition(id, position);
-        if (updatedPosition) {
-            return responseSuccess(res, { id, ...position }, 'Position updated successfully', 200);
+        const position = await PositionModel.getPositionById(id);
+        if (position) {
+            const companyID = await ProfileModel.getCompany(recruiterId);
+            if (position.companyId !== companyID) {
+                return responseError(res, 'Forbidden', 403);
+            }
+            const {
+                title, description, salary, type, deadline,
+            } = req.body;
+            const newPosition = {
+                title,
+                description,
+                salary,
+                type,
+                deadline,
+                updatedAt: new Date().toISOString(),
+            };
+            const updatedPosition = await PositionModel.updatePosition(id, newPosition);
+            if (updatedPosition) {
+                return responseSuccess(res, { id, ...newPosition }, 'Position updated successfully', 200);
+            }
+            return responseError(res, 'Position update failed', 500);
         }
         return responseError(res, 'Position not found', 404);
     }
@@ -76,9 +84,17 @@ const deletePosition = async (req, res) => {
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'recruiter' || role === 'admin') {
-        const deletedPosition = await PositionModel.deletePositionById(id);
-        if (deletedPosition) {
-            return responseSuccess(res, null, 'Position deleted successfully', 200);
+        const position = await PositionModel.getPositionById(id);
+        if (position) {
+            const companyID = await ProfileModel.getCompany(recruiterId);
+            if (position.companyId !== companyID) {
+                return responseError(res, 'Forbidden', 403);
+            }
+            const deletedPosition = await PositionModel.deletePositionById(id);
+            if (deletedPosition) {
+                return responseSuccess(res, null, 'Position deleted successfully', 200);
+            }
+            return responseError(res, 'Position deletion failed', 500);
         }
         return responseError(res, 'Position not found', 404);
     }
