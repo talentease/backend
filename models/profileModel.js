@@ -10,11 +10,17 @@ class ProfileModel {
 
     static async getProfileById(id) {
         const profile = await collection.doc(id).get();
-        return profile;
+        if (profile.exists) {
+            return profile;
+        }
+        return null;
     }
 
     static async getProfileByEmail(email) {
         const profile = await collection.where('email', '==', email).get();
+        if (profile.empty) {
+            return null;
+        }
         return profile;
     }
 
@@ -23,15 +29,6 @@ class ProfileModel {
         if (profile.exists) {
             const updatedProfile = await collection.doc(id).set(data);
             return updatedProfile;
-        }
-        return null;
-    }
-
-    static async deleteProfile(id) {
-        const profile = await collection.doc(id).get();
-        if (profile.exists) {
-            const deletedProfile = await collection.doc(id).delete();
-            return deletedProfile;
         }
         return null;
     }
