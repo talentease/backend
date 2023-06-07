@@ -15,7 +15,10 @@ class ApplicationModel {
 
     static async getApplicationById(id) {
         const application = await collection.doc(id).get();
-        return application;
+        if (application.exists) {
+            return application;
+        }
+        return null;
     }
 
     static async updateApplication(id, data) {
@@ -23,15 +26,6 @@ class ApplicationModel {
         if (application.exists) {
             const updatedApplication = await collection.doc(id).update(data);
             return updatedApplication;
-        }
-        return null;
-    }
-
-    static async deleteApplicationById(id) {
-        const application = await collection.doc(id).get();
-        if (application.exists) {
-            const deletedApplication = await collection.doc(id).delete();
-            return deletedApplication;
         }
         return null;
     }

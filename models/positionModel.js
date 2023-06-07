@@ -1,4 +1,5 @@
 const { db } = require('../config/firebaseAdmin');
+const CompanyModel = require('./companyModel');
 
 const collection = db.collection('positions');
 
@@ -12,7 +13,7 @@ class PositionModel {
         const positions = await collection.get();
         const positionsData = positions.docs.map(async (position) => {
             const company = await position.data().companyID;
-            const companyData = await db.collection('companies').doc(company).get();
+            const companyData = await CompanyModel.getCompanyById(company);
             const companyDetails = companyData.data();
             const positionDetails = position.data();
             return {
@@ -28,7 +29,10 @@ class PositionModel {
         const position = await collection.doc(id).get();
         if (position.exists) {
             const company = await position.data().companyID;
-            const companyData = await db.collection('companies').doc(company).get();
+            const companyData = await CompanyModel.getCompanyById(company);
+            if (!companyData) {
+                return null;
+            }
             const companyDetails = companyData.data();
             const positionDetails = position.data();
             return { ...positionDetails, company: companyDetails };
