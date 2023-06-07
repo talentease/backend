@@ -64,7 +64,7 @@ const updatePosition = async (req, res) => {
         };
         const updatedPosition = await PositionModel.updatePosition(id, position);
         if (updatedPosition) {
-            return responseSuccess(res, { id: updatedPosition.id, ...position }, 'Position updated successfully', 200);
+            return responseSuccess(res, { id, ...position }, 'Position updated successfully', 200);
         }
         return responseError(res, 'Position not found', 404);
     }
