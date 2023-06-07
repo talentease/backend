@@ -2,6 +2,7 @@ const { admin } = require('../config/firebaseAdmin');
 const { responseError, responseSuccess } = require('../utils/responseHandler');
 const ApplicationModel = require('../models/applicationModel');
 const PositionModel = require('../models/positionModel');
+const ProfileModel = require('../models/profileModel');
 
 // eslint-disable-next-line consistent-return
 const createApplication = async (req, res) => {
@@ -48,6 +49,28 @@ const createApplication = async (req, res) => {
     }
 };
 
+const updateApplication = async (req, res) => {
+    const id = req.params.applicationId;
+    const recruiterId = req.user.uid;
+    const role = await ProfileModel.getRole(recruiterId);
+    if (role === 'recruiter' || role === 'admin') {
+        const {
+            status,
+        } = req.body;
+        const application = {
+            status, // 'pending', 'accepted', 'rejected
+            updatedAt: new Date().toISOString(),
+        };
+        const updatedApplication = await ApplicationModel.updateApplication(id, application);
+        if (updatedApplication) {
+            return responseSuccess(res, { id, ...application }, 'Application updated successfully', 200);
+        }
+        return responseError(res, 'Application update failed', 500);
+    }
+    return responseError(res, 'Forbidden', 403);
+};
+
 module.exports = {
     createApplication,
+    updateApplication,
 };
