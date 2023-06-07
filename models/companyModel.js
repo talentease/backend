@@ -15,7 +15,10 @@ class CompanyModel {
 
     static async getCompanyById(id) {
         const company = await collection.doc(id).get();
-        return company;
+        if (company.exists) {
+            return company;
+        }
+        return null;
     }
 
     static async updateCompany(id, data) {
@@ -23,15 +26,6 @@ class CompanyModel {
         if (company.exists) {
             const updatedCompany = await collection.doc(id).update(data);
             return updatedCompany;
-        }
-        return null;
-    }
-
-    static async deleteCompanyById(id) {
-        const company = await collection.doc(id).get();
-        if (company.exists) {
-            const deletedCompany = await collection.doc(id).delete();
-            return deletedCompany;
         }
         return null;
     }

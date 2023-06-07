@@ -4,7 +4,7 @@ const ProfileModel = require('../models/profileModel');
 
 const createProfileCandidate = async (req, res) => {
     const existingProfile = await ProfileModel.getProfileByEmail(req.user.email);
-    if (!existingProfile.empty) {
+    if (existingProfile) {
         return responseError(res, 'Profile already exists', 422);
     }
     const { firstName, lastName, phoneNumber } = req.body;
@@ -28,13 +28,13 @@ const createProfileRecruiter = async (req, res) => {
     const {
         email, password, firstName, lastName, phoneNumber,
     } = req.body;
-    const existingProfile = await ProfileModel.getProfileByEmail(email);
-    if (!existingProfile.empty) {
-        return responseError(res, 'Profile already exists', 422);
-    }
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'admin') {
+        const existingProfile = await ProfileModel.getProfileByEmail(email);
+        if (existingProfile) {
+            return responseError(res, 'Profile already exists', 422);
+        }
         const companyID = await ProfileModel.getCompany(recruiterId);
         const createdUser = await admin
             .auth()
@@ -80,23 +80,15 @@ const updateProfile = async (req, res) => {
     if (!updatedProfile) {
         return responseError(res, 'Profile update failed', 500);
     }
-    return responseSuccess(res, profile, 'Profile updated successfully', 200);
+    return responseSuccess(res, { id: updatedProfile.id, ...profile }, 'Profile updated successfully', 200);
 };
 
 const getProfileById = async (req, res) => {
     const profile = await ProfileModel.getProfileById(req.params.profileId);
-    if (!profile.exists) {
+    if (!profile) {
         return responseError(res, 'Profile not found', 404);
     }
     return responseSuccess(res, profile.data(), 'Profile retrieved successfully', 200);
-};
-
-const deleteProfileById = async (req, res) => {
-    const deletedProfile = await ProfileModel.deleteProfile(req.params.profileId);
-    if (!deletedProfile) {
-        return responseError(res, 'Profile deletion failed', 500);
-    }
-    return responseSuccess(res, null, 'Profile deleted successfully', 200);
 };
 
 module.exports = {
@@ -104,5 +96,4 @@ module.exports = {
     createProfileRecruiter,
     updateProfile,
     getProfileById,
-    deleteProfileById,
 };

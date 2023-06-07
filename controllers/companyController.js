@@ -15,7 +15,7 @@ const createCompanyAdmin = async (req, res) => {
         companyDescription,
     } = req.body;
     const existingProfile = await ProfileModel.getProfileByEmail(email);
-    if (!existingProfile.empty) {
+    if (existingProfile) {
         return responseError(res, 'Profile already exists', 422);
     }
     const createdUser = await admin
