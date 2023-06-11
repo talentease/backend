@@ -23,7 +23,7 @@ const createApplication = async (req, res) => {
     };
     try {
         const bucket = admin.storage().bucket();
-        const filename = `${Date.now()}_${file.originalname}`;
+        const filename = `${candidateId}`;
         const fileUpload = bucket.file(filename);
         const stream = fileUpload.createWriteStream({
             metadata: {
