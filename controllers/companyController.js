@@ -29,6 +29,7 @@ const createCompanyAdmin = async (req, res) => {
             name: companyName,
             address: companyAddress,
             description: companyDescription,
+            slug: companyName.toLowerCase().replace(/ /g, '-'),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
