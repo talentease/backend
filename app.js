@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const positionRoutes = require('./routes/positionRoutes');
@@ -14,6 +15,11 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors(
+    {
+        origin: 'http://localhost',
+    },
+));
 
 router.get('/', (req, res) => {
   res.send('Welcome to the TalentEase API');
