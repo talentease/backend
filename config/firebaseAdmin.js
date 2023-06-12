@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 
-const serviceAccount = require('./serviceAccountKey.json');
+// eslint-disable-next-line global-require,import/no-unresolved
+const serviceAccount = process.env.SERVICE_ACCOUNT || require('./firebaseAdminKey.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),

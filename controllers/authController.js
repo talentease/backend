@@ -14,6 +14,7 @@ const registerWithEmail = (req, res) => {
             const user = {
                 email: userRecord.email,
                 createdAt: new Date().toISOString(),
+                role: 'candidate',
             };
             const userData = db.collection('users').doc(userRecord.uid).set(user);
             if (!userData) {
