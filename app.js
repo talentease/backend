@@ -15,11 +15,7 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(
-    {
-        origin: 'http://localhost',
-    },
-));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 router.get('/', (req, res) => {
   res.send('Welcome to the TalentEase API');
