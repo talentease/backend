@@ -51,6 +51,28 @@ class ApplicationModel {
         return Promise.all(applicationsData);
     }
 
+    static async getApplicationByCandidateId(candidateId) {
+        const applications = await collection.where('candidateId', '==', candidateId).get();
+        if (applications.empty) {
+            return null;
+        }
+        const applicationsData = applications.docs.map(async (application) => {
+            const position = await application.data().positionId;
+            const positionData = await PositionModel.getPositionById(position);
+            const candidate = await application.data().candidateId;
+            const candidateData = await ProfileModel.getProfileById(candidate);
+            const candidateDetails = candidateData.data();
+            const applicationDetails = application.data();
+            return {
+                id: application.id,
+                ...applicationDetails,
+                candidate: candidateDetails,
+                position: positionData,
+            };
+        });
+        return Promise.all(applicationsData);
+    }
+
     static async updateApplication(id, data) {
         const application = await collection.doc(id).get();
         if (application.exists) {

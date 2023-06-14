@@ -112,9 +112,22 @@ const getApplicationByPositionId = async (req, res) => {
     return responseError(res, 'Forbidden', 403);
 };
 
+const getApplicationByCandidateId = async (req, res) => {
+    const candidateId = req.user.uid;
+    if (candidateId === req.params.candidateId) {
+        const applications = await ApplicationModel.getApplicationByCandidateId(candidateId);
+        if (applications) {
+            return responseSuccess(res, applications, 'Applications retrieved successfully', 200);
+        }
+        return responseError(res, 'Applications not found', 404);
+    }
+    return responseError(res, 'Forbidden', 403);
+};
+
 module.exports = {
     createApplication,
     updateApplication,
     getApplicationById,
     getApplicationByPositionId,
+    getApplicationByCandidateId,
 };
