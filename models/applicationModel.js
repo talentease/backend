@@ -1,4 +1,6 @@
 const { db } = require('../config/firebaseAdmin');
+const PositionModel = require('./positionModel');
+const ProfileModel = require('./profileModel');
 
 const collection = db.collection('applications');
 
@@ -11,7 +13,18 @@ class ApplicationModel {
     static async getApplicationById(id) {
         const application = await collection.doc(id).get();
         if (application.exists) {
-            return application;
+            const position = await application.data().positionId;
+            const positionData = await PositionModel.getPositionById(position);
+            const candidate = await application.data().candidateId;
+            const candidateData = await ProfileModel.getProfileById(candidate);
+            const candidateDetails = candidateData.data();
+            const applicationDetails = application.data();
+            return {
+                id: application.id,
+                ...applicationDetails,
+                candidate: candidateDetails,
+                position: positionData,
+            };
         }
         return null;
     }
@@ -21,11 +34,21 @@ class ApplicationModel {
         if (applications.empty) {
             return null;
         }
-        const applicationList = [];
-        applications.forEach((application) => {
-            applicationList.push({ id: application.id, ...application.data() });
+        const applicationsData = applications.docs.map(async (application) => {
+            const position = await application.data().positionId;
+            const positionData = await PositionModel.getPositionById(position);
+            const candidate = await application.data().candidateId;
+            const candidateData = await ProfileModel.getProfileById(candidate);
+            const candidateDetails = candidateData.data();
+            const applicationDetails = application.data();
+            return {
+                id: application.id,
+                ...applicationDetails,
+                candidate: candidateDetails,
+                position: positionData,
+            };
         });
-        return applicationList;
+        return Promise.all(applicationsData);
     }
 
     static async updateApplication(id, data) {

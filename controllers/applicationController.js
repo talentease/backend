@@ -79,14 +79,14 @@ const getApplicationById = async (req, res) => {
     const recruiterId = req.user.uid;
     const role = await ProfileModel.getRole(recruiterId);
     if (role === 'recruiter' || role === 'admin') {
-        const company = await ProfileModel.getCompany(recruiterId);
-        const position = await PositionModel.getPositionById(id);
-        if (position.companyId !== company) {
-            return responseError(res, 'Forbidden', 403);
-        }
         const application = await ApplicationModel.getApplicationById(id);
         if (application) {
-            return responseSuccess(res, { id: application.id, ...application.data() }, 'Application retrieved successfully', 200);
+            const company = await ProfileModel.getCompany(recruiterId);
+            const position = await PositionModel.getPositionById(application.positionId);
+            if (position.companyId !== company) {
+                return responseError(res, 'Forbidden', 403);
+            }
+            return responseSuccess(res, { id: application.id, ...application }, 'Application retrieved successfully', 200);
         }
         return responseError(res, 'Application not found', 404);
     }
