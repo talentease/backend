@@ -46,6 +46,15 @@ const getPositionById = async (req, res) => {
     return responseSuccess(res, { id, ...position }, 'Position retrieved successfully', 200);
 };
 
+const getPositionByCompanyId = async (req, res) => {
+    const { companyId } = req.params;
+    const positions = await PositionModel.getPositionByCompanyId(companyId);
+    if (positions) {
+        return responseSuccess(res, positions, 'Positions retrieved successfully', 200);
+    }
+    return responseError(res, 'Positions retrieval failed', 500);
+};
+
 const updatePosition = async (req, res) => {
     const id = req.params.positionId;
     const recruiterId = req.user.uid;
@@ -105,6 +114,7 @@ module.exports = {
     createPosition,
     getAllPositions,
     getPositionById,
+    getPositionByCompanyId,
     updatePosition,
     deletePosition,
 };
