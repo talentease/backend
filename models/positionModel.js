@@ -40,6 +40,25 @@ class PositionModel {
         return null;
     }
 
+    static async getPositionByCompanyId(companyId) {
+        const positions = await collection.where('companyId', '==', companyId).get();
+        if (positions.empty) {
+            return null;
+        }
+        const positionsData = positions.docs.map(async (position) => {
+            const company = await position.data().companyId;
+            const companyData = await CompanyModel.getCompanyById(company);
+            const companyDetails = companyData.data();
+            const positionDetails = position.data();
+            return {
+                id: position.id,
+                ...positionDetails,
+                company: companyDetails,
+            };
+        });
+        return Promise.all(positionsData);
+    }
+
     static async updatePosition(id, data) {
         const position = await collection.doc(id).get();
         if (position.exists) {
