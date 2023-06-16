@@ -4,8 +4,8 @@ const admin = require('firebase-admin');
 const serviceAccount = process.env.SERVICE_ACCOUNT || require('./firebaseAdminKey.json');
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: process.env.STORAGE_BUCKET,
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: process.env.STORAGE_BUCKET || 'talentease-project.appspot.com/CV',
 });
 
 const db = admin.firestore();
