@@ -23,7 +23,7 @@ const createApplication = async (req, res) => {
     };
     try {
         const bucket = admin.storage().bucket();
-        const filename = `${Date.now()}_${file.originalname}`;
+        const filename = `CV/${candidateId}.pdf`;
         const fileUpload = bucket.file(filename);
         const stream = fileUpload.createWriteStream({
             metadata: {
@@ -54,26 +54,34 @@ const updateApplication = async (req, res) => {
     const recruiterId = req.user.uid;
     const { status } = req.body;
     const role = await ProfileModel.getRole(recruiterId);
+
     if (role === 'recruiter' || role === 'admin') {
         const company = await ProfileModel.getCompany(recruiterId);
-        const positionId = await ApplicationModel.getApplicationById(id);
-        const position = await PositionModel.getPositionById(positionId.data().positionId);
+        const applicationData = await ApplicationModel.getApplicationById(id);
+        const { positionId } = applicationData;
+
+        const position = await PositionModel.getPositionById(positionId);
+
         if (position.companyId !== company) {
             return responseError(res, 'Forbidden', 403);
         }
+
         const application = {
             status, // 'pending', 'accepted', 'rejected
             updatedAt: new Date().toISOString(),
         };
+
         const updatedApplication = await ApplicationModel.updateApplication(id, application);
+
         if (updatedApplication) {
             return responseSuccess(res, { id, ...application }, 'Application updated successfully', 200);
         }
+
         return responseError(res, 'Application update failed', 500);
     }
+
     return responseError(res, 'Forbidden', 403);
 };
-
 const getApplicationById = async (req, res) => {
     const id = req.params.applicationId;
     const recruiterId = req.user.uid;

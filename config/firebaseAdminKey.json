@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "talentease-project",
+  "private_key_id": "387ad6b1ec70a2f4893c6d15fc3cd49b6d2f6b9e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqLThYU3KDcm6n\nmsrDB6W/X9Rmn/BkGFGSruFboMJHjPEC5cqhOX4xsJ9NmI0k5abDKRDoKcrVuv69\nhSL4Q6LMyTJeQqLLpY8DKT+ZwW4kkeLcIuOzT0SwuCbOyQTgGiUzXbC+6U+PI9Ht\nrWnjmSYZvVsqr1Zf6ZQrYdEQ64Lary/90MxqxLiiiLkJo5Ou1V5vhluWhyu8w4H6\nHOq810Mmf3d/1NZ49+vGPTalJwPwLXR/vN/TbApWlD1oZ17lLrLj2pOAf+lom7vD\nPM48tXakAFKP1UCoLLxFux+w8kq9xLePcBSN36ES5s2vCve+Msrr7uvBKjUJ2xSK\nF35CnGCdAgMBAAECggEAANfc8COCALMvWMmXHykYvFyT08UasJpsiNFzdsYxMlXP\ne6XLRiT2IAUB2zYLO4vAfORjikDAnXI5JxH170ZVEjLTtkKJcMrs6y+xTahdEzaS\n+LViPmvsydaJYOStyrN+Ha5pGSh9ceo8AfZUgpq5OGzdXxNu4zJp3o8LT1k0FtzZ\n0kAFaqX4PTHTDkH7T5RMi2wvLXIBzw64XnLGkzE8n2r60tjlKFFAK8w+rWnargKZ\njNQttFJ6+bvLlTJbYKBgtHNA99P9HAZ3CfbNp3dA2PVemP/ambD7vY42ilDREmks\nLA5ik4/6uu1ebnuIbqLhja2xgPtnZrxsZ1rfdmg2rwKBgQDhoct123EeIfwNPP/p\nTI7dDaN/SZgL+fo5tLiE41KYCWLe+J09sSgIrYSSKITKcBUfbzDGsuyUXZnsypnI\n1bo6yGXypEGun/CrpifbVaHkYnW499mFuIJ/cvIXxyZ/L2MAP7Gvb8/8B5d4jGZN\nL4PRfr46O/JyObGddeCrt8JQEwKBgQDBFLJ85SVIbkDZmHcJLUdIIIk6/9hdUhfd\nt7ggaMpyB/lhnKlKn8mbSO2ITTYKJZM+Tf6twHc9aKnNliTs2p4cLZvOoNHzRgqr\nmURvpIu9pGMmZ5zZudH/9X3rhY4aBz1UbarIJbHjCuxeqUFIRnr0QV5I9gGj3bUo\n/ZpB6viCjwKBgGufXQkObtpMo4k8+2QwnERcaQwh8mBkEDLOPOVF+POEJqDsPTRb\n+BiLi5ybrxtQcwLXapCcb7QlIXKNAOWG7Jl1VQtzxdChgY6eZox8QAhL3pMnxZ2+\n8KASF9+3omkwFSzdNMfVsYMpq9pYPcO7UkjvB5WHWpGZa1sMCupdcFX5AoGAd9TC\nmeUVaIiU0vdfGWDyln8q7GURAYoLqd119xdSXcc5LS2vm9Ljqu5uDWPuIAoGAmsh\nnvCOkJw+louSyzU7X72mr2z8IIHd6XYsFSYIXGCD8Lfpju9WuAbCacPv15OaqqWN\nkr5iUsjavj1JePPVJ3bSb3HOvsbAwnnynOqZ5V0CgYEAzaqcn4JCWO7h1dTgyxWf\nAExVY0w6oPPyMBBXMHRj2M6zrdg7YiJZmV0cRK1wYYh0Z+13Ei7h6X+VcMbuyJBP\n3ztvya1P3NELX/M8OFhkHIqE7cXUWYIg6vrSUN9KRafB8o/AZIGEEbM+Mu7ktg/A\nSBYqAsqcsY/CAVDZx/NrO60=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-db1kq@talentease-project.iam.gserviceaccount.com",
+  "client_id": "104298415803011019820",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-db1kq%40talentease-project.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
